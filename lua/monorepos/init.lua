@@ -8,18 +8,21 @@ local M = {}
 local function find_rush_json_ancestor()
   local current_buffer = vim.api.nvim_get_current_buf();
   local buffer_path = vim.api.nvim_buf_get_name(current_buffer);
+  local start_path = buffer_path;
 
-  return lspconfig_utils.search_ancestors(buffer_path, function(path)
+  if string.len(buffer_path) == 0 then
+    start_path = vim.fn.getcwd();
+  end
+  return lspconfig_utils.search_ancestors(start_path, function(path)
     if lspconfig_utils.path.is_file(lspconfig_utils.path.join(path, 'rush.json')) then
       return path
     end
   end)
 end
 
-
 local function get_projects()
   local ok, projects = pcall(function()
-local rush_json_path = find_rush_json_ancestor();
+    local rush_json_path = find_rush_json_ancestor();
     local package_json_blob = vim.fn.readfile(lspconfig_utils.path.join(rush_json_path .. '/rush.json'), 'B')
     local e = string.gsub(package_json_blob, "/%*.-%*/", "");
     local e1 = string.gsub(e, '// .-\n', "");
@@ -37,7 +40,7 @@ end
 
 local repos = function(opts)
   opts = opts or {}
-local rush_json_path = find_rush_json_ancestor();
+  local rush_json_path = find_rush_json_ancestor();
   pickers.new(opts, {
     prompt_title = "repos",
     finder = finders.new_table {
@@ -59,4 +62,3 @@ end
 M.show_monorepos = repos;
 
 return M
-
