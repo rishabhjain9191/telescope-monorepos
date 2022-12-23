@@ -16,10 +16,10 @@ local function find_rush_json_ancestor()
   end)
 end
 
-local rush_json_path = find_rush_json_ancestor();
 
 local function get_projects()
   local ok, projects = pcall(function()
+local rush_json_path = find_rush_json_ancestor();
     local package_json_blob = vim.fn.readfile(lspconfig_utils.path.join(rush_json_path .. '/rush.json'), 'B')
     local e = string.gsub(package_json_blob, "/%*.-%*/", "");
     local e1 = string.gsub(e, '// .-\n', "");
@@ -37,6 +37,7 @@ end
 
 local repos = function(opts)
   opts = opts or {}
+local rush_json_path = find_rush_json_ancestor();
   pickers.new(opts, {
     prompt_title = "repos",
     finder = finders.new_table {
