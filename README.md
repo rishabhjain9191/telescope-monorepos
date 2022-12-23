@@ -7,7 +7,14 @@ Right now, this supports only rush monorepos. Other frameworks like yarn workspa
 
 ## Get Started
 
-Install telescope and this plugin then
+### Installation
+
+Using [packer.nvim](https://github.com/wbthomason/packer.nvim)
+
+```lua
+use {
+  'rishabhjain9191/telescope-monorepos'}
+```
 
 ```lua
 require("telescope").load_extension("monorepos")
